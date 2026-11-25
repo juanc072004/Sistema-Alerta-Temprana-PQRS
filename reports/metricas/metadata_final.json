@@ -1,0 +1,64 @@
+{
+  "modelo_seleccionado": "random_forest",
+  "umbral_alerta": 0.5160745819597081,
+  "variables_categoricas": [
+    "TIPO_PETICION",
+    "MEDIO_RECEPCION",
+    "NOMBRE_LOCALIDAD"
+  ],
+  "variables_numericas": [
+    "ANIO_RADICACION",
+    "MES_RADICACION",
+    "DIA_SEMANA_RADICACION"
+  ],
+  "categorias": {
+    "TIPO_PETICION": [
+      "DERECHO DE PETICION DE CONSULTAS",
+      "DERECHO DE PETICION DE INFORMACIONES",
+      "DERECHO DE PETICION EN INTERES GENERAL",
+      "DERECHO DE PETICION EN INTERES PARTICULAR"
+    ],
+    "MEDIO_RECEPCION": [
+      "Correo",
+      "Correo certificado",
+      "Correo electronico",
+      "Fax",
+      "Redes sociales",
+      "SDQS",
+      "Telefono",
+      "Ventanilla CDI"
+    ],
+    "NOMBRE_LOCALIDAD": [
+      "ALCALDIA LOCAL DE ANTONIO NARINO",
+      "ALCALDIA LOCAL DE BARRIOS UNIDOS",
+      "ALCALDIA LOCAL DE BOSA",
+      "ALCALDIA LOCAL DE CANDELARIA",
+      "ALCALDIA LOCAL DE CHAPINERO",
+      "ALCALDIA LOCAL DE CIUDAD BOLIVAR",
+      "ALCALDIA LOCAL DE ENGATIVA",
+      "ALCALDIA LOCAL DE FONTIBON",
+      "ALCALDIA LOCAL DE KENNEDY",
+      "ALCALDIA LOCAL DE MARTIRES",
+      "ALCALDIA LOCAL DE PUENTE ARANDA",
+      "ALCALDIA LOCAL DE RAFAEL URIBE URIBE",
+      "ALCALDIA LOCAL DE SAN CRISTOBAL",
+      "ALCALDIA LOCAL DE SANTAFE",
+      "ALCALDIA LOCAL DE SUBA",
+      "ALCALDIA LOCAL DE SUMAPAZ",
+      "ALCALDIA LOCAL DE TEUSAQUILLO",
+      "ALCALDIA LOCAL DE TUNJUELITO",
+      "ALCALDIA LOCAL DE USAQUEN",
+      "ALCALDIA LOCAL DE USME",
+      "NIVEL CENTRAL",
+      "SIN_DATO"
+    ]
+  },
+  "corte_entrenamiento_validacion": "2024-08-30",
+  "corte_validacion_prueba": "2025-10-20",
+  "registros_train": 29420,
+  "registros_val": 15189,
+  "registros_test": 9881,
+  "tasa_positivos_prueba": 0.02833721283270924,
+  "objetivo": "Superación preliminar de plazo nominal (no incumplimiento legal validado)",
+  "advertencia": "Modelo experimental. No utilizar para decisiones sancionatorias ni como certificación legal."
+}

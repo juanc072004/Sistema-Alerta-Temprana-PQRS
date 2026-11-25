@@ -1,0 +1,3 @@
+﻿modelo,registros_entrenamiento,registros_prueba,pr_auc,roc_auc,verdaderos_negativos,falsos_positivos,falsos_negativos,verdaderos_positivos
+random_forest,44609,9881,0.06324338868424853,0.6528789783802282,8768,833,219,61
+xgboost,44609,9881,0.07470709612770873,0.6778397339562843,8548,1053,210,70

@@ -1,0 +1,28 @@
+# Entorno virtual
+.venv/
+venv/
+env/
+
+# Archivos temporales de Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Configuración y secretos
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Datos originales y procesados
+data/raw/
+data/processed/
+
+# Modelos generados
+models/
+
+# Caché y archivos temporales
+.ipynb_checkpoints/
+*.log
+.DS_Store
+Thumbs.db

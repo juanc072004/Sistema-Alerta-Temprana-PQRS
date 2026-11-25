@@ -1,0 +1,17 @@
+{
+    "objetivo": "SUPERA_PLAZO_PRELIMINAR",
+    "alcance": "Modelo experimental",
+    "advertencia": "No representa incumplimiento legal confirmado.",
+    "variables": [
+        "TIPO_PETICION",
+        "MEDIO_RECEPCION",
+        "NOMBRE_LOCALIDAD",
+        "SUBTEMA",
+        "ANIO_RADICACION",
+        "MES_RADICACION",
+        "DIA_SEMANA_RADICACION"
+    ],
+    "fecha_corte": "2025-10-20T00:00:00.000000",
+    "total_entrenamiento": 44609,
+    "total_prueba": 9881
+}

@@ -1,0 +1,400 @@
+
+GUÍA DE INSTALACIÓN, DEPENDENCIAS Y EJECUCIÓN EN OTRO COMPUTADOR
+SISTEMA DE ALERTA TEMPRANA PQRS | WINDOWS 11 + VISUAL STUDIO CODE
+Edición: 18 de noviembre de 2026
+
+
+PROPÓSITO
+
+Este archivo permite trasladar el PROYECTO COMPLETO a otro computador, instalar
+las librerías, preparar el entorno virtual, entrenar o cargar los modelos y
+abrir el dashboard. Se basa en el README y en el código final real del
+proyecto. El asistente Ollama es OPCIONAL; la predicción puede funcionar sin él.
+
+IMPORTANTE ANTES DE COMENZAR
+
+1. No basta con transferir el ZIP "Proyecto_PQRS_Entrega_Final.zip". Ese ZIP
+   contiene SOLO las carpetas src y app de la entrega final; NO incluye la
+   base de datos, los scripts anteriores, los modelos ya entrenados ni todas
+   las salidas. Lo recomendable es copiar LA CARPETA COMPLETA Proyecto_PQRS.
+2. Copiar el proyecto mediante USB, disco externo o almacenamiento seguro.
+   Si contiene PQRS reales, cumplir las reglas de autorización y privacidad.
+3. NO copiar la carpeta .venv al nuevo equipo: reconstruirla allí.
+4. Si existe un archivo requirements.txt generado en el computador original,
+   úselo para reproducir versiones. Si no existe, se ofrecen dependencias
+   mínimas verificadas en el código final.
+5. Las rutas de esta guía son ejemplos: cambian según el usuario de Windows.
+6. Abrir los proyectos Python únicamente desde una copia de confianza.
+
+
+1. PROGRAMAS QUE DEBEN ESTAR INSTALADOS
+
+[A] Python
+    Enlace oficial: https://www.python.org/downloads/windows/
+    Se trabajó originalmente con Python 3.14. En otro equipo puede usarse una
+    versión compatible con las librerías instaladas. Si no hay versiones de
+    paquetes disponibles para 3.14, intentar Python 3.12 o 3.13 y REENTRENAR
+    los modelos en ese entorno. Evitar mezclar versiones de paquetes.
+
+[B] Visual Studio Code
+    Enlace oficial: https://code.visualstudio.com/
+    Extensión recomendada: "Python" de Microsoft.
+
+[C] Ollama [OPCIONAL, solo para pestaña de asistente]
+    Enlace oficial: https://ollama.com/download/windows
+    Usar un modelo pequeño si el computador tiene recursos limitados.
+
+Nota: no es necesario instalar una base de datos SQL adicional para abrir el
+     dashboard final. Este proyecto utiliza archivos CSV y modelos joblib.
+
+2. COPIAR LA ESTRUCTURA COMPLETA DEL PROYECTO
+
+
+Ejemplo de ubicación:
+    C:\Users\TU_USUARIO\Desktop\Proyecto_PQRS
+
+Estructura esperada (las carpetas pueden incluir más archivos):
+
+Proyecto_PQRS\
+    app\
+        dashboard_final.py
+    src\
+        01_auditoria_datos.py                 [si se dispone del original]
+        02_analisis_exploratorio.py            [si se dispone del original]
+        03_preparar_datos.py                   [si se dispone del original]
+        03E_calcular_sla.py                   [REQUERIDO si se regenera el SLA]
+        05_entrenar_version_final.py
+    data\
+        raw\
+            pqrs_sdg_2022_2026.csv            [datos originales, con permisos]
+        processed\
+            pqrs_sla_preliminar.csv            [REQUERIDO para entrenar]
+    models\
+        ..._final.joblib                      [se generan al entrenar]
+    reports\
+        metricas\
+            metadata_final.json               [REQUERIDO para el dashboard]
+            comparacion_final.csv             [generado al entrenar]
+            predicciones_prueba_final.csv     [generado al entrenar]
+
+Si solo se copió el ZIP final: integrar su subcarpeta src y su subcarpeta app
+DENTRO de Proyecto_PQRS. NO borrar los scripts ni los datos ya existentes.
+
+
+3. ABRIR EL PROYECTO EN VISUAL STUDIO CODE
+
+1) Abrir VS Code.
+2) Seleccionar Archivo > Abrir carpeta.
+3) Abrir la carpeta Proyecto_PQRS (la raíz, no la carpeta app ni src).
+4) Abrir Terminal > Nuevo terminal.
+5) Verificar que aparezca la ruta Proyecto_PQRS en la terminal.
+
+En PowerShell:
+    pwd
+    py --version
+
+Si py no está disponible:
+    python --version
+
+
+4. CREAR Y ACTIVAR UN ENTORNO VIRTUAL NUEVO
+
+
+Desde la RAÍZ Proyecto_PQRS:
+
+    py -m venv .venv
+
+Activar con PowerShell:
+    .\.venv\Scripts\Activate.ps1
+
+Debería verse (.venv) al inicio de la línea de la terminal.
+
+Si PowerShell bloquea la activación de scripts:
+    Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+    .\.venv\Scripts\Activate.ps1
+
+Este cambio se limita a la sesión actual de PowerShell.
+
+En CMD (en vez de PowerShell):
+    .venv\Scripts\activate.bat
+
+Seleccionar también el intérprete en VS Code:
+    Ctrl + Shift + P
+    Python: Select Interpreter
+    Elegir ...\Proyecto_PQRS\.venv\Scripts\python.exe
+
+Verificar:
+    python --version
+    python -m pip --version
+
+
+5. INSTALAR LAS LIBRERÍAS
+
+
+Actualizar pip:
+    python -m pip install --upgrade pip
+
+OPCIÓN A: si la copia trae requirements.txt:
+    python -m pip install -r requirements.txt
+
+OPCIÓN B: si NO existe requirements.txt, instalar las usadas en el
+entrenamiento final, dashboard y procesamiento:
+
+    python -m pip install numpy pandas scikit-learn xgboost joblib streamlit requests holidays
+
+Para todas las fases exploratorias, gráficas y análisis complementarios:
+
+    python -m pip install matplotlib seaborn plotly openpyxl imbalanced-learn jupyter ipykernel psutil
+
+No todas las librerías de la segunda línea son necesarias para abrir el
+dashboard final. Pueden hacer falta para scripts previos o pruebas adicionales.
+
+Verificación de imports principales:
+
+    python -c "import numpy,pandas,sklearn,xgboost,joblib,streamlit,requests,holidays; print('LIBRERIAS PRINCIPALES OK')"
+
+Comprobar versiones instaladas:
+    python -m pip list
+
+Guardar las versiones reproducibles en un archivo (en el computador original
+es preferible obtenerlo DESPUÉS de comprobar que todo funciona):
+    python -m pip freeze > requirements.txt
+
+IMPORTANTE: un requirements.txt generado con Python 3.14 puede contener
+versiones no compatibles con otra versión de Python. Si ocurre, revisar y
+recrear el entorno en vez de forzar instalaciones incompatibles.
+
+
+6. VERIFICAR QUE ESTÁN LOS DATOS NECESARIOS
+
+
+El script FINAL de entrenamiento lee directamente:
+    data\processed\pqrs_sla_preliminar.csv
+
+Comprobar:
+    Test-Path .\data\processed\pqrs_sla_preliminar.csv
+
+Debe devolver True.
+
+Si devuelve False:
+  a) Recuperar el CSV procesado del equipo original, o
+  b) Recuperar el archivo original data\raw\pqrs_sdg_2022_2026.csv y todos los
+     scripts de preparación, y ejecutar las fases previas hasta que
+     03E_calcular_sla.py produzca el archivo esperado.
+
+ATENCIÓN: el ZIP de entrega final no incluye el script 03E ni sus datos de
+entrada. No se puede reconstruir todo el proceso usando únicamente ese ZIP.
+
+
+7. ENTRENAR LOS MODELOS EN EL OTRO COMPUTADOR
+
+
+Con .venv activado y el CSV procesado disponible:
+
+    python src\05_entrenar_version_final.py
+
+El entrenamiento debe generar, entre otros:
+    models\random_forest_final.joblib
+    models\xgboost_final.joblib
+    reports\metricas\comparacion_final.csv
+    reports\metricas\metadata_final.json
+    reports\metricas\predicciones_prueba_final.csv
+
+El dashboard lee metadata_final.json y carga automáticamente el archivo
+.joblib del modelo seleccionado. Ambos archivos deben pertenecer al MISMO
+entrenamiento, con dependencias compatibles.
+
+Si el nuevo computador ya tiene esos archivos copiados, se puede intentar
+abrir el dashboard directamente. Sin embargo, para evitar incompatibilidad
+entre versiones de Python, scikit-learn, joblib y XGBoost, se recomienda
+REENTRENAR en el nuevo entorno.
+
+8. ABRIR EL DASHBOARD DE STREAMLIT
+
+
+Desde la carpeta raíz del proyecto, con (.venv) activo:
+
+    python -m streamlit run app\dashboard_final.py
+
+Streamlit mostrará una URL local, normalmente:
+    http://localhost:8501
+
+Abrir la URL en el navegador si no se abre automáticamente.
+
+Revisar estas pestañas:
+    1. Indicadores y resultados.
+    2. Simular petición.
+    3. Análisis de prueba.
+    4. Asistente local.
+
+Para detener Streamlit en su terminal:
+    Ctrl + C
+
+Para salir del entorno virtual cuando termine:
+    deactivate
+
+
+9. INSTALAR Y PROBAR OLLAMA [OPCIONAL]
+
+
+1) Instalar Ollama desde la página oficial.
+2) Abrirlo en Windows y asegurarse de que el servicio esté ejecutándose.
+3) Abrir otra terminal PowerShell (no es necesario activar .venv para ollama).
+4) Verificar disponibilidad:
+
+    ollama --version
+    ollama list
+
+5) Descargar el modelo utilizado en el proyecto:
+
+    ollama pull qwen2.5:1.5b
+
+6) Confirmar que aparece en la lista:
+
+    ollama list
+
+7) Probarlo desde la terminal:
+
+    ollama run qwen2.5:1.5b
+
+   Escribir una pregunta y comprobar la respuesta.
+   Para salir del chat de Ollama:
+
+    /bye
+
+8) Desde el dashboard Streamlit, abrir "Asistente local". El campo "Modelo
+   local de Ollama" debe coincidir EXACTAMENTE con el nombre instalado:
+
+    qwen2.5:1.5b
+
+9) Hacer una pregunta breve. El dashboard consulta:
+    http://127.0.0.1:11434/api/generate
+
+Para ver dónde está ejecutándose el modelo (CPU/GPU) cuando esté cargado:
+    ollama ps
+
+Nota: si la GPU es antigua o incompatible, Ollama puede procesar las
+consultas principalmente con CPU. No confundir lentitud con un fallo del
+modelo predictivo: son módulos distintos.
+
+
+10. PRUEBAS DE ACEPTACIÓN ANTES DE ENTREGAR
+
+
+[ ] Python funciona desde terminal y apunta a .venv.
+[ ] Todos los imports principales funcionan.
+[ ] Existe data\processed\pqrs_sla_preliminar.csv.
+[ ] 05_entrenar_version_final.py termina sin excepción.
+[ ] Existe reports\metricas\metadata_final.json.
+[ ] Existe el modelo .joblib indicado por metadata_final.json.
+[ ] Streamlit abre en el navegador.
+[ ] La pestaña Indicadores presenta información.
+[ ] La simulación permite elegir tipo, medio, localidad y fecha.
+[ ] La pestaña Análisis de prueba presenta resultados.
+[ ] Ollama responde desde la terminal, si se decidió instalarlo.
+[ ] La pestaña Asistente local responde, si Ollama está disponible.
+[ ] Se mantiene la advertencia de que el riesgo de SLA es experimental.
+
+
+11. ERRORES FRECUENTES Y SOLUCIONES
+
+
+ERROR: "python no se reconoce" / "py no se reconoce"
+  - Instalar Python desde python.org.
+  - Reiniciar la terminal y revisar el PATH.
+  - Confirmar la versión con py --version o python --version.
+
+ERROR: "pip no se reconoce"
+  - Usar python -m pip en lugar de pip.
+
+ERROR: "No module named ..."
+  - Activar .venv.
+  - Ejecutar python -m pip install NOMBRE_DEL_PAQUETE.
+  - Revisar que VS Code esté usando .venv, no el Python global.
+
+ERROR: "running scripts is disabled on this system"
+  - En PowerShell usar:
+      Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+      .\.venv\Scripts\Activate.ps1
+
+ERROR: "No se encontró data/processed/pqrs_sla_preliminar.csv"
+  - Falta copiar el CSV procesado o ejecutar las fases anteriores.
+  - Confirmar que se está ejecutando desde Proyecto_PQRS.
+
+ERROR: "Primero ejecuta: python src/05_entrenar_version_final.py"
+  - Falta reports\metricas\metadata_final.json.
+  - Entrenar y comprobar generación de archivos.
+
+ERROR: "No existe el modelo ..._final.joblib"
+  - Falta el archivo .joblib seleccionado en metadata_final.json.
+  - Entrenar de nuevo y evitar mezclar modelos de distintas ejecuciones.
+
+ERROR al abrir un archivo .joblib copiado de otro computador
+  - Comprobar versiones de scikit-learn, xgboost y joblib.
+  - Reentrenar con la instalación nueva.
+  - No abrir archivos joblib de fuentes desconocidas; su carga puede ejecutar código.
+
+ERROR: puerto de Streamlit ocupado
+  - Detener la sesión antigua (Ctrl + C) o usar:
+      python -m streamlit run app\dashboard_final.py --server.port 8502
+
+ERROR: "ollama no se reconoce"
+  - Instalar Ollama, cerrar y volver a abrir la terminal.
+
+ERROR: conexión a Ollama rechazada
+  - Comprobar que Ollama esté funcionando y escuchando en 127.0.0.1:11434.
+  - Ejecutar ollama list; verificar configuración de firewall o puerto.
+
+ERROR: "model not found" en asistente
+  - Descargar con ollama pull qwen2.5:1.5b.
+  - Verificar que el campo del dashboard coincida con ollama list.
+
+ERROR: Ollama tarda mucho o responde de forma incoherente
+  - Es una limitación posible de equipos modestos y modelos pequeños.
+  - Cerrar aplicaciones pesadas; formular preguntas concretas.
+  - Evitar afirmar que sus respuestas equivalen a dictámenes jurídicos.
+  - No cambiar a un modelo mayor sin comprobar RAM y rendimiento.
+
+
+12. COMANDOS RÁPIDOS PARA LA PRÓXIMA VEZ
+
+
+Una vez todo esté instalado, no es necesario repetir pip install cada día.
+
+En VS Code, abrir la raíz del proyecto y ejecutar:
+
+    .\.venv\Scripts\Activate.ps1
+    python -m streamlit run app\dashboard_final.py
+
+Si falta el modelo entrenado:
+
+    python src\05_entrenar_version_final.py
+
+Si se quiere usar el asistente, Ollama debe estar instalado, abierto y con el
+modelo qwen2.5:1.5b descargado.
+
+Para salir:
+    Ctrl + C        (detener Streamlit)
+    deactivate      (desactivar entorno Python)
+
+13. INFORMACIÓN PARA LA SUSTENTACIÓN
+
+
+- El dashboard consume modelos Random Forest/XGBoost entrenados previamente.
+- El asistente Ollama solo explica métricas agregadas y no decide la etiqueta.
+- Las alertas representan riesgo experimental de superar plazos nominales,
+  NO un incumplimiento legal confirmado.
+- El componente Ollama es opcional: si está apagado, las funciones de
+  indicadores, simulación y análisis deberían seguir disponibles.
+- No se deben introducir datos personales en preguntas de prueba.
+
+REFERENCIAS ÚTILES
+------------------
+Python:       https://www.python.org/
+VS Code:      https://code.visualstudio.com/
+Streamlit:    https://docs.streamlit.io/
+Ollama:       https://docs.ollama.com/
+scikit-learn: https://scikit-learn.org/stable/
+XGBoost:      https://xgboost.readthedocs.io/
+
+FIN DE LA GUÍA.

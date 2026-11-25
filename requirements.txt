@@ -1,0 +1,17 @@
+
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+xgboost
+imbalanced-learn
+joblib
+jupyter
+ipykernel
+streamlit
+plotly
+requests
+psutil
+openpyxl
+holidays
